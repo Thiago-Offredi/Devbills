@@ -1,0 +1,68 @@
+# version: '3.8'
+
+# services:
+#   mongo:
+#     container_name: mongodb
+#     restart: always
+#     image: mongo
+#     environment:
+#       MONGO_INITDB_ROOT_USERNAME: devbills
+#       MONGO_INITDB_ROOT_PASSWORD: pass123
+#     ports:
+#       - '27017:27017'
+#     networks:
+#       - local
+
+#   app:
+#     container_name: devbills-api
+#     depends_on:
+#       - mongo
+#     build:
+#       context: .
+#       dockerfile: Dockerfile
+#     volumes:
+#       - ./:/usr/src/app
+#     ports:
+#       - '3333:3333'
+#     networks:
+#       - local
+#     env_file:
+#       - .env
+
+# networks:
+#   local:
+#     name: local
+version: '3.8'
+
+services:
+  mongo:
+    container_name: mongodb
+    restart: always
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: devbills
+      MONGO_INITDB_ROOT_PASSWORD: pass123
+    ports:
+      - '27017:27017'
+    networks:
+      - local
+
+  app:
+    container_name: devbills-api
+    depends_on:
+      - mongo
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/usr/src/app
+    ports:
+      - '3333:3333'
+    environment:
+      - MONGO_URL=mongodb://devbills:pass123@mongo:27017/devbills-contas?authSource=admin
+    networks:
+      - local
+
+networks:
+  local:
+    name: local
